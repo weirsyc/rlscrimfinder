@@ -1,0 +1,19 @@
+.MuiAlert-icon {
+  margin: auto;
+}
+
+.accept-button{
+  margin-top: 5px !important;
+}
+.decline-button{
+  margin-top: 5px !important;
+  margin-left: 10px !important;
+}
+
+.match-found{
+  font-size: 120%;
+}
+.waiting-message{
+  font-size: 110%;
+  vertical-align: middle;
+}
