@@ -1,0 +1,61 @@
+.sc-chat-window.opened {
+  width: unset;
+  height: 500px;
+  max-height: unset;
+  position: unset;
+  right: unset;
+  bottom: unset;
+}
+.sc-launcher.opened {
+  display: none;
+}
+button.sc-user-input--file-icon-wrapper{
+  display: none;
+}
+.sc-header--img{
+  display: none;
+}
+.sc-header--close-button{
+  display: none;
+}
+
+.sc-message-list{
+  padding: 15px 0;
+}
+
+.sc-message--text{
+  padding: 9px 10px;
+}
+.sc-message {
+  width: 350px;
+}
+
+.sc-header {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.sc-user-input {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.sc-user-input--text:empty:before{
+  color: rgba(86, 88, 103, 0.7);
+}
+
+.sc-message--content.received .sc-message--text{
+  background-color: #e4e4e4;
+}
+
+.sc-message-list{
+  border-bottom: 1px solid #dcdcdc;
+}
+
+.sc-user-input--emoji-icon {
+  filter: invert(0%) sepia(0%) saturate(445%) hue-rotate(195deg) brightness(93%) contrast(9000%);
+}
+
+.sc-user-input--send-icon{
+  filter: invert(0%) sepia(0%) saturate(445%) hue-rotate(195deg) brightness(93%) contrast(9000%);
+}

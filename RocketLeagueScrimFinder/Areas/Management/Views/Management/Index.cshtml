@@ -1,0 +1,122 @@
+﻿@model ManagementViewModel
+@{
+    ViewData["Title"] = "Matchmaking Management";
+}
+
+<h3>Player Queue</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Steam ID</th>
+            <th>Display Name</th>
+            <th>MMR</th>
+            <th>Matchmaking Preference</th>
+            <th>Servers</th>
+            <th>Collegiate</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var i in Model.PlayerQueueList)
+        {
+            <tr>
+                <td>@i.SteamId</td>
+                <td>@i.DisplayName</td>
+                <td>@i.Mmr</td>
+                <td>@i.MatchmakingPreference</td>
+                <td>@string.Join(" ,", i.Servers.Select(s => s.ToString()))</td>
+                <td>@i.Collegiate</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h3>Players In Matches</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Steam ID</th>
+            <th>Display Name</th>
+            <th>MMR</th>
+            <th>Matchmaking Preference</th>
+            <th>Servers</th>
+            <th>Collegiate</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var i in Model.PlayersInMatch)
+        {
+            <tr>
+                <td>@i.SteamId</td>
+                <td>@i.DisplayName</td>
+                <td>@i.Mmr</td>
+                <td>@i.MatchmakingPreference</td>
+                <td>@string.Join(", ", i.Servers.Select(s => s.ToString()))</td>
+                <td>@i.Collegiate</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h3>Lobbies</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>P1 Steam ID</th>
+            <th>P1 Name</th>
+            <th>P1 MMR</th>
+            <th>P1 Accepted</th>
+            <th>P1 Left</th>
+            <th>P2 Steam ID</th>
+            <th>P2 Name</th>
+            <th>P2 MMR</th>
+            <th>P2 Accepted</th>
+            <th>P2 Left</th>
+            <th>Lobby Name</th>
+            <th>Lobby Password</th>
+            <th>Servers</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var i in Model.LobbyList)
+        {
+            <tr>
+                <td>@i.Player1SteamId</td>
+                <td>@i.Player1Name</td>
+                <td>@i.Player1Mmr</td>
+                <td>@i.Player1MatchAccepted</td>
+                <td>@i.Player1Left</td>
+                <td>@i.Player2SteamId</td>
+                <td>@i.Player2Name</td>
+                <td>@i.Player2Mmr</td>
+                <td>@i.Player2MatchAccepted</td>
+                <td>@i.Player2Left</td>
+                <td>@i.LobbyName</td>
+                <td>@i.LobbyPassword</td>
+                <td>@string.Join(", ", i.ServerChoices.Select(s => s.ToString()))</td>
+            </tr>
+            <tr>
+                <td>Chat Log:</td>
+                <td colspan="12">
+                    @string.Join("", i.ChatLog.Select(c => $"{{{c.SteamId}:{c.Message}:{c.Sent.ToShortTimeString()}}}"))
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h3>Decline List</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Steam ID Pair</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var i in Model.DeclineList)
+        {
+            <tr>
+                <td>@i</td>
+            </tr>
+        }
+    </tbody>
+</table>
