@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RocketLeagueScrimFinder.Data;
 using RocketLeagueScrimFinder.Extensions;
 using RocketLeagueScrimFinder.Models;
 using RocketLeagueScrimFinder.Services;
@@ -17,12 +19,18 @@ namespace RocketLeagueScrimFinder.Controllers
         private SchedulingService _schedulingService;
         private TrackerService _trackerService;
         private SteamService _steamService;
+        private DiscordService _discordService;
+        private ScrimFinderContext _dbContext;
 
-        public ScheduleController(SchedulingService schedulingService, TrackerService trackerService, SteamService steamService)
+        public ScheduleController(SchedulingService schedulingService, 
+            TrackerService trackerService, SteamService steamService,
+            DiscordService discordService, ScrimFinderContext dbContext)
         {
             _schedulingService = schedulingService;
             _trackerService = trackerService;
             _steamService = steamService;
+            _discordService = discordService;
+            _dbContext = dbContext;
         }
 
         [Route("add")]
@@ -70,6 +78,21 @@ namespace RocketLeagueScrimFinder.Controllers
                 var newRequest = _schedulingService.AddRequest(request);
                 var newRequestViewModel = this.GetRequestViewModel(newRequest);
                 _schedulingService.NotifyRequestAdded(id, newRequestViewModel);
+
+                var scrimEvent = _schedulingService.GetScrimEvent(id);
+                var user = new UserInfo
+                {
+                    SteamId = newRequestViewModel.SteamId,
+                    DisplayName = newRequestViewModel.DisplayName,
+                    Mmr = newRequestViewModel.Mmr
+                };
+
+                var userSettings = _dbContext.UserSettings.FirstOrDefault(u => u.SteamId == scrimEvent.OpponentSteamId);
+                if (userSettings != null)
+                {
+                    _discordService.SendMessage(DmType.ScheduleRequest, userSettings.DiscordId, user);
+                }
+
                 return newRequestViewModel;
             }
             return null;
@@ -85,6 +108,14 @@ namespace RocketLeagueScrimFinder.Controllers
                 var refreshedEvent = _schedulingService.AcceptRequest(id);
                 var viewModel = this.GetEventViewModel(refreshedEvent);
                 _schedulingService.NotifyRequestAccepted(viewModel);
+
+                var currentUser = new UserInfo
+                {
+                    SteamId = viewModel.SteamId,
+                    DisplayName = viewModel.DisplayName,
+                    Mmr = viewModel.Mmr
+                };
+                _discordService.SendMessage(DmType.ScheduleAccept, viewModel.OpponentSteamId, currentUser);
 
                 return viewModel;
             }

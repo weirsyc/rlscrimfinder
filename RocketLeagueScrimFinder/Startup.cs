@@ -9,6 +9,7 @@ using RocketLeagueScrimFinder.Services;
 using RocketLeagueScrimFinder.SignalR;
 using RocketLeagueScrimFinder.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace RocketLeagueScrimFinder
 {
@@ -63,6 +64,7 @@ namespace RocketLeagueScrimFinder
 
             services.AddSingleton<TrackerService>();
             services.AddSingleton<MatchmakingService>();
+            services.AddSingleton<DiscordService>();
             services.AddTransient<SchedulingService>();
             services.AddTransient<SteamService>();
 
@@ -123,6 +125,17 @@ namespace RocketLeagueScrimFinder
                 }
             });
 #endif
+
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                using (var context = serviceScope.ServiceProvider.GetService<ScrimFinderContext>())
+                {
+                    if (context.Database.GetPendingMigrations().Any())
+                    {
+                        context.Database.Migrate();
+                    }
+                }
+            }
         }
     }
 }
