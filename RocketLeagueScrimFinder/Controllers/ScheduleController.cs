@@ -87,7 +87,7 @@ namespace RocketLeagueScrimFinder.Controllers
                     Mmr = newRequestViewModel.Mmr
                 };
 
-                var userSettings = _dbContext.UserSettings.FirstOrDefault(u => u.SteamId == scrimEvent.OpponentSteamId);
+                var userSettings = _dbContext.UserSettings.FirstOrDefault(u => u.SteamId == scrimEvent.SteamId);
                 if (userSettings != null)
                 {
                     _discordService.SendMessage(DmType.ScheduleRequest, userSettings.DiscordId, user);
@@ -115,7 +115,11 @@ namespace RocketLeagueScrimFinder.Controllers
                     DisplayName = viewModel.DisplayName,
                     Mmr = viewModel.Mmr
                 };
-                _discordService.SendMessage(DmType.ScheduleAccept, viewModel.OpponentSteamId, currentUser);
+                var userSettings = _dbContext.UserSettings.FirstOrDefault(u => u.SteamId == viewModel.OpponentSteamId);
+                if (userSettings != null)
+                {
+                    _discordService.SendMessage(DmType.ScheduleAccept, userSettings.DiscordId, currentUser);
+                }
 
                 return viewModel;
             }

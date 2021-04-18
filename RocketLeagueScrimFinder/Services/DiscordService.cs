@@ -57,13 +57,13 @@ namespace RocketLeagueScrimFinder.Services
             switch (dmType)
             {
                 case DmType.MatchFound:
-                    return $"Match found! Opponent: [{opponent.DisplayName}](https://steamcommunity.com/id/{opponent.SteamId}) - {opponent.Mmr}. Please respond by going to https://rlscrimfinder.com/Matchmaking";
+                    return $"Match found! Opponent: {opponent.DisplayName} (https://steamcommunity.com/profiles/{opponent.SteamId}) - {opponent.Mmr}. Please respond by going to https://rlscrimfinder.com/Matchmaking";
                 case DmType.MatchAccepted:
                     return $"Match accepted! Please join the game lobby: https://rlscrimfinder.com/Matchmaking";
                 case DmType.ScheduleAccept:
-                    return $"Scheduled match was accepted by [{opponent.DisplayName}](https://steamcommunity.com/id/{opponent.SteamId}) - {opponent.Mmr}. You can join the lobby by going to https://rlscrimfinder.com/Schedule";
+                    return $"Scheduled match was accepted by {opponent.DisplayName} (https://steamcommunity.com/profiles/{opponent.SteamId}) - {opponent.Mmr}. You can join the lobby by going to https://rlscrimfinder.com/Schedule";
                 case DmType.ScheduleRequest:
-                    return $"You have a new match request from [{opponent.DisplayName}](https://steamcommunity.com/id/{opponent.SteamId}) - {opponent.Mmr}. Please respond by going to https://rlscrimfinder.com/Schedule";
+                    return $"You have a new match request from {opponent.DisplayName} (https://steamcommunity.com/profiles/{opponent.SteamId}) - {opponent.Mmr}. Please respond by going to https://rlscrimfinder.com/Schedule";
             }
             return null;
         }

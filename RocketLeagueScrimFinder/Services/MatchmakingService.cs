@@ -249,11 +249,11 @@ namespace RocketLeagueScrimFinder.Services
                 var userSettings2 = dbContext.UserSettings.FirstOrDefault(u => u.SteamId == user2.SteamId);
                 if (userSettings1 != null)
                 {
-                    _discordService.SendMessage(dmType, userSettings1.DiscordId, user1);
+                    _discordService.SendMessage(dmType, userSettings1.DiscordId, user2);
                 }
                 if (userSettings2 != null)
                 {
-                    _discordService.SendMessage(dmType, userSettings2.DiscordId, user2);
+                    _discordService.SendMessage(dmType, userSettings2.DiscordId, user1);
                 }
             }
         }
