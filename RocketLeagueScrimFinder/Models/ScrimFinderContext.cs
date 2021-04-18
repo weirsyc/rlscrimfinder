@@ -12,5 +12,6 @@ namespace RocketLeagueScrimFinder.Models
         public DbSet<ScrimEvent> ScrimEvents { get; set; }
         public DbSet<ScrimRequest> ScrimRequests { get; set; }
         public DbSet<LobbyInfo> LobbyInfos { get; set; }
+        public DbSet<UserSettings> UserSettings { get; set; }
     }
 }

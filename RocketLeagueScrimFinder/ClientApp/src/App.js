@@ -4,6 +4,7 @@ import { Layout } from './components/Layout';
 import { Home } from './components/Home';
 import { Matchmaking } from './components/Matchmaking';
 import { Schedule } from './components/Schedule';
+import { Settings } from './components/Settings';
 import { Report } from './components/Report';
 import { Donate } from './components/Donate';
 
@@ -33,6 +34,7 @@ export const App = () => {
       <Route exact path='/' component={() => <Home userInfo={userInfo} userIsLoading={userIsLoading}/>} />
       <Route exact path='/Matchmaking' component={() => <Matchmaking userInfo={userInfo} userIsLoading={userIsLoading}/>} />
       <Route exact path='/Schedule' component={() => <Schedule userInfo={userInfo} userIsLoading={userIsLoading}/>} />
+      <Route exact path='/Settings' component={() => <Settings userInfo={userInfo} userIsLoading={userIsLoading}/>} />
       <Route exact path='/Report' component={Report} />
       <Route exact path='/Donate' component={Donate} />
     </Layout>

@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.DependencyInjection;
 using RocketLeagueScrimFinder.Data;
+using RocketLeagueScrimFinder.Models;
 using RocketLeagueScrimFinder.SignalR;
 using System;
 using System.Collections;
@@ -21,14 +23,18 @@ namespace RocketLeagueScrimFinder.Services
         private IMemoryCache _declineListCache;
         private readonly object _lockObj = new object();
         private IHubContext<AppHub> _hubContext;
+        private DiscordService _discordService;
+        private readonly IServiceScopeFactory _scopeFactory;
 
-        public MatchmakingService(IHubContext<AppHub> hubContext, IMemoryCache declineListCache)
+        public MatchmakingService(IHubContext<AppHub> hubContext, IMemoryCache declineListCache, DiscordService discordService, IServiceScopeFactory scopeFactory)
         {
             _playerQueueList = new List<UserInfo>();
             _playersInMatch = new List<UserInfo>();
             _lobbyList = new List<MatchmakingData>();
             _declineListCache = declineListCache;             
             _hubContext = hubContext;
+            _scopeFactory = scopeFactory;
+            _discordService = discordService;
         }
 
         internal void UpdatePreference(string steamId, int matchMakingPreference)
@@ -216,9 +222,42 @@ namespace RocketLeagueScrimFinder.Services
                     {
                         _hubContext.Clients.Client(client).SendAsync("EnterLobby", true);
                     }
+                    this.SendMatchAcceptedNotifications(DmType.MatchAccepted, lobbyInfo);
                 }
             }
         }
+
+        private void SendMatchAcceptedNotifications(DmType dmType, MatchmakingData lobbyInfo)
+        {
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<ScrimFinderContext>();
+
+                var user1 = new UserInfo
+                {
+                    SteamId = lobbyInfo.Player1SteamId,
+                    DisplayName = lobbyInfo.Player1Name,
+                    Mmr = lobbyInfo.Player1Mmr
+                };
+                var user2 = new UserInfo
+                {
+                    SteamId = lobbyInfo.Player2SteamId,
+                    DisplayName = lobbyInfo.Player2Name,
+                    Mmr = lobbyInfo.Player2Mmr
+                };
+                var userSettings1 = dbContext.UserSettings.FirstOrDefault(u => u.SteamId == user1.SteamId);
+                var userSettings2 = dbContext.UserSettings.FirstOrDefault(u => u.SteamId == user2.SteamId);
+                if (userSettings1 != null)
+                {
+                    _discordService.SendMessage(dmType, userSettings1.DiscordId, user2);
+                }
+                if (userSettings2 != null)
+                {
+                    _discordService.SendMessage(dmType, userSettings2.DiscordId, user1);
+                }
+            }
+        }
+
         internal void DeclineMatch(string steamId)
         {
             lock (_lockObj)
@@ -288,6 +327,7 @@ namespace RocketLeagueScrimFinder.Services
                     {
                         _hubContext.Clients.Client(client).SendAsync("MatchFound", matchMakingData);
                     }
+                    this.SendMatchAcceptedNotifications(DmType.MatchFound, matchMakingData);
                     lobbyCounter++;
                     if (lobbyCounter == 1000)
                     {

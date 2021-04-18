@@ -15,6 +15,7 @@ We're using .NET's Secret Manager to retrieve the [TRN](https://tracker.gg/) and
 {
   "TrnApiKey": "API_KEY",
   "SteamApiKey": "API_KEY",
+  "DiscordBotToken": "BOT_TOKEN",
   "ConnectionStrings": {
     "RlsfDatabase": "DB_CONNECTION_STRING"
   }

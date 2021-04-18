@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RocketLeagueScrimFinder.Data;
 using RocketLeagueScrimFinder.Extensions;
+using RocketLeagueScrimFinder.Models;
 using RocketLeagueScrimFinder.Services;
 using System.Linq;
 
@@ -12,10 +14,13 @@ namespace RocketLeagueScrimFinder.Controllers
     {
         private TrackerService _trackerService;
         private SteamService _steamService;
-        public UserController(TrackerService trackerService, SteamService steamService)
+        private ScrimFinderContext _dbContext;
+
+        public UserController(TrackerService trackerService, SteamService steamService, ScrimFinderContext dbContext)
         {
             _trackerService = trackerService;
             _steamService = steamService;
+            _dbContext = dbContext;
         }
 
         [Route("userinfo")]
@@ -32,5 +37,33 @@ namespace RocketLeagueScrimFinder.Controllers
             }
             return null;
         }
+
+        [Route("getSettings")]
+        [HttpGet]
+        [Authorize]
+        public UserSettings GetUserSettings()
+        {
+            var steamId = UserExtensions.GetSteamId(this.User);
+            return _dbContext.UserSettings.FirstOrDefault(u => u.SteamId == steamId);
+        }
+
+        [Route("updateSettings")]
+        [HttpPost]
+        [Authorize]
+        public void UpdateSettings([FromBody] UserSettings userSettings)
+        {
+            var existingSettings = _dbContext.UserSettings.FirstOrDefault(u => u.SteamId == userSettings.SteamId);
+            if (existingSettings == null)
+            {
+                _dbContext.UserSettings.Add(userSettings);
+            }
+            else
+            {
+                existingSettings.DiscordId = userSettings.DiscordId;
+                _dbContext.UserSettings.Update(existingSettings);
+            }
+            _dbContext.SaveChanges();
+        }
+
     }
 }

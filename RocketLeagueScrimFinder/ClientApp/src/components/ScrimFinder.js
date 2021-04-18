@@ -167,8 +167,8 @@ export const ScrimFinder = props => {
           />
           )}
         />
-        </ListItem>
-        <ListItem>
+      </ListItem>
+      <ListItem>
         <FormControlLabel
           control={
             <Checkbox
@@ -179,11 +179,11 @@ export const ScrimFinder = props => {
           }
           label="Collegiate"
         />
-        </ListItem>
-        <ListItem>
-      <Button variant="outlined" color="primary" onClick={toggleMatchSearch}>
-        {props.isSearching ? `Cancel Search` : `Begin Search`}
-      </Button>
+      </ListItem>
+      <ListItem>
+        <Button variant="outlined" color="primary" onClick={toggleMatchSearch}>
+          {props.isSearching ? `Cancel Search` : `Begin Search`}
+        </Button>
       </ListItem>
       <ListItem>
         <ListItemText>{errorMessage}</ListItemText>

@@ -39,7 +39,7 @@ namespace RocketLeagueScrimFinder.Services
             }
         }
 
-        private ScrimEvent GetScrimEvent(int id)
+        internal ScrimEvent GetScrimEvent(int id)
         {
             return _dbContext.ScrimEvents.Include(s => s.RequestList).Include(s => s.ChatLogs).FirstOrDefault(e => e.Id == id);
         }
