@@ -42,6 +42,9 @@ export class NavMenu extends Component {
                 <NavItem>
                   <NavLink tag={Link} className="text-dark" to="/Schedule" active={pathname === '/schedule'}>Schedule</NavLink>
                 </NavItem>
+                <NavItem>
+                  <NavLink tag={Link} className="text-dark" to="/Settings" active={pathname === '/settings'}>Settings</NavLink>
+                </NavItem>
                 </>}
                 <NavItem>
                   <NavLink tag={Link} className="text-dark" to="/Report" active={pathname === '/report'}>Report bugs</NavLink>
