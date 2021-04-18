@@ -40,7 +40,7 @@ export const Settings = (props) => {
     <Paper elevation={3} className={classes.container}>
       <h5>Settings</h5>
       <ListItem>
-        <span>RLSF has a Discord Bot that can send you match notifications. Simply join this server <a href='https://discord.gg/YtSDmFf5qd'>https://discord.gg/YtSDmFf5qd</a>, and then update your Discord ID below.</span>
+        <span>RLSF has a Discord Bot that can send you match notifications. Simply join this server <a href='https://discord.gg/YtSDmFf5qd' target="_blank" rel="noopener noreferrer">https://discord.gg/YtSDmFf5qd</a>, and then update your Discord ID below.</span>
       </ListItem>
       <ListItem><img src={copyImg} /></ListItem>
       <ListItem>
